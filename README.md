@@ -27,7 +27,7 @@ Missing data can be classified into several types based on the underlying patter
 ## ${\textsf{\color{yellow}Using missingno to visualize the distribution of missing values}}$
 ---
 
-The missingno library is a useful tool for visualizing missing values in a dataset. missingno provides four types of visualizations to help uncover patterns and provide insights into the missing data in the dataset. To illustrate, we will use the missingno library to explore and analyse the missingness of data in the [Titanic dataset](https://www.kaggle.com/competitions/titanic/data).
+The missingno library is a useful tool for visualizing missing values in a dataset. missingno provides four types of visualizations to help uncover patterns and provide insights into the missing data in the dataset.
 
 
 |**Plot**|**Description**|
@@ -40,16 +40,25 @@ The missingno library is a useful tool for visualizing missing values in a datas
 
 &nbsp;
 
-First, install missingno
+To illustrate, we will use the missingno library to explore and analyse the missingness of data in the [Titanic dataset](https://www.kaggle.com/competitions/titanic/data).
+
+
+1. Install missingno
 
 ```python
 pip install missingno
 ```
 
-Import missingno and other necesary libraries 
+2. Import missingno and other necesary libraries 
 
 ```python
 import numpy as np
 import pandas as pd
 import missingno as msno
+```
+
+3. Read and load dataset into a pandas DataFrame
+
+```python
+df = pd.read_csv("train.csv")
 ```
