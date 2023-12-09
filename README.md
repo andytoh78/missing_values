@@ -10,7 +10,7 @@ Missing Values refers to the **absence of data or information for specific varia
 
 &nbsp;
 
-## ${\textsf{\color{yellow}Types of Missing Data}}$
+## **Types of Missing Data**
 ---
 
 Missing data can be classified into several types based on the underlying patterns and causes of the missingness. Understanding the types of missing data is crucial for effective data analysis and the selection of appropriate imputation strategies that minimize bias and inaccuracies. 
@@ -24,7 +24,7 @@ Missing data can be classified into several types based on the underlying patter
 
 &nbsp;
 
-## ${\textsf{\color{yellow}Using missingno to visualize the distribution of missing values}}$
+## **Using missingno to visualize the distribution of missing values**
 ---
 
 The missingno library is a useful tool for visualizing missing values in a dataset. missingno provides four types of visualizations to help uncover patterns and provide insights into the missing data in the dataset.
@@ -61,4 +61,16 @@ import missingno as msno
 
 ```python
 df = pd.read_csv("train.csv")
+df.head()
 ```
+![image](https://github.com/andytoh78/missing_values/assets/139482827/dd7a2a93-db4d-497c-a21e-22dad8efeb2e)
+
+4. Check for missing values
+
+```python
+df.isnull().sum()
+```
+
+
+
+
