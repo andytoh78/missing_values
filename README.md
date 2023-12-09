@@ -43,34 +43,5 @@ The missingno library is a useful tool for visualizing missing values in a datas
 To illustrate, we will use the missingno library to explore and analyse the missingness of data in the [Titanic dataset](https://www.kaggle.com/competitions/titanic/data).
 
 
-1. Install missingno
-
-```python
-pip install missingno
-```
-
-2. Import missingno and other necesary libraries 
-
-```python
-import numpy as np
-import pandas as pd
-import missingno as msno
-```
-
-3. Read and load dataset into a pandas DataFrame
-
-```python
-df = pd.read_csv("train.csv")
-df.head()
-```
-![image](https://github.com/andytoh78/missing_values/assets/139482827/dd7a2a93-db4d-497c-a21e-22dad8efeb2e)
-
-4. Check for missing values
-
-```python
-df.isnull().sum()
-```
-
-
 
 
