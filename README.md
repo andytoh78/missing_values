@@ -36,18 +36,18 @@ Missing data can be classified into several types based on the underlying patter
 The missingno library is a useful tool for visualizing and understanding missing values in a dataset. It is especially useful in the exploratory data analysis phase for uncovering patterns of missingness, which can help drive the strategy for handling the missing values. 
 
 **Bar Plot**
-- Displays the **percentage of missing values for each column** in the dataset
-- Helps **identify columns with high proportion** of missing values
+- Displays the **percentage of missing values for each column** in the dataset.
+- Helps **identify columns with high proportion** of missing values.
 
 **Matrix Plot**
-- Visualize the **locations and patterns** of missingness, like whether the missing values are clustered or spred randomly across the dataset
-- **White lines indicate missing values**
+- Visualize the **locations and patterns** of missingness, like whether the missing values are clustered or spred randomly across the dataset.
+- **White lines indicate missing values**.
 
 **Heatmap**
-- Compute and visualize the **correlation of missingness (range between -1 and 1) between pairs of columns with missing values**
-- It **does not include columns without missing values**. Columns without missing values are typically not the focus of this visualization because their missingness is not relevant in this context
-- The primary purpose is to **understand whether the missingness in one column is related to the missingness in other columns**
-- This insight will be useful in providing guidance on the imputation strategies
+- Compute and visualize the **correlation of missingness (range between -1 and 1) between pairs of columns with missing values**.
+- It **does not include columns without missing values**. Columns without missing values are typically not the focus of this visualization because their missingness is not relevant in this context.
+- The primary purpose is to **understand whether the missingness in one column is related to the missingness in other columns**.
+- This insight will be useful in providing guidance on the imputation strategies.
 
 |**Correlation**|**Description**|
 |:--|:--|
@@ -96,3 +96,57 @@ pip install missingno
 # Import missingno
 import missingno as msno
 ```
+### **${\color{black}\textsf{Bar Plot}}$**
+
+```python
+msno.bar(df, figsize=(16, 3), fontsize=10)
+plt.show()
+```
+
+![image](https://github.com/andytoh78/missing_values/assets/139482827/e73e3301-431b-4cfa-ba8b-239ef14f6a14)
+
+The length of the each bar corresponds to the number of non-missing values for the column and the white spaces above indicates missing values. From the visual representation, 
+- Cabin has the highest number of missing values, followed by Age.
+- Embarked has 2 missing values.
+- All other columns seem to have no missing values.
+
+### **${\color{black}\textsf{Matrix Plot}}$**
+
+```python
+msno.matrix(df, figsize=(16, 4), fontsize=10)
+plt.show()
+```
+
+![image](https://github.com/andytoh78/missing_values/assets/139482827/fa444ec6-a00b-493c-9e39-39c24167cf87)
+
+From the matrix plot, the missing values for **Age and Cabin appear to be randomly distributed**, which suggests that the **missingness could be either Missing At Random (MAR) or Missing Completely At Random (MCAR)**. **Embarked has only 2 missing values and they can be assumed to be Missing Completely At Random (MCAR)**.
+
+To get a better understanding of the patterns or relationships between the missing values across different columns, we will sort the dataset by one column at a time and then visualize the missing values using msno.matrix().
+
+```python
+# Create a function to sort dataset by column and plot msno.matrix()
+def visualize_missingness_by_column(df):
+    for col in df.columns:
+        # Sort dataframe by the column
+        df_sorted=df.sort_values(by=col)
+        
+        # Plot the missing values using msno.matrix()
+        msno.matrix(df_sorted,  figsize=(16, 4), fontsize=10)
+        plt.title(f"Missingness Sorted by {col}", fontsize=14, fontweight=700)
+```
+![image](https://github.com/andytoh78/missing_values/assets/139482827/bc9c890b-db9e-47da-8cf5-5857588484b9)
+
+- Each row represents a passenger.
+- Each column represents a variable in the dataset.
+- White lines indicate missing values.
+- Black regions indicate non-missing values.
+- The sparkline at the right summarizes the general shape of the data completeness and points out the rows with the maximum and minimum missing data.
+
+From the matrix plots, 
+- The **missing values for "Embarked" are likely to be Missing Completely At Random (MCAR)**. This assumption is based on the small number of missing values and the absence of any clear patterns for their missingness.</p>
+- The **missing values for "Age" is also likely to be Missing Completely At Random (MCAR)**  as the missing values are randomly distributed in all the matrix plots.</p>
+- The **missingness for "Cabin" seems to have an association with the "Pclass" (passenger class) and "Fare"**. Passengers in higher classes, such as first class, who likely paid higher fares for their tickets, are more likely to have cabin information available. Therefore, the **missing values for "Cabin" are likely to be Missing at Random (MAR)** and the missingness can be predicted from the observed data in  "Pclass" and "Fare".
+
+
+
+
