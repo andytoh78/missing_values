@@ -35,17 +35,29 @@ Missing data can be classified into several types based on the underlying patter
 
 The missingno library is a useful tool for visualizing and understanding missing values in a dataset. It is especially useful in the exploratory data analysis phase for uncovering patterns of missingness, which can help drive the strategy for handling the missing values. 
 
-**Matrix Visualization**
-- Displays the **percentage of missing values for each column** in the dataset. Helps **identify columns with high proportion** of missing values.
+**Bar Plot**
+- Displays the **percentage of missing values for each column** in the dataset
+- Helps **identify columns with high proportion** of missing values
 
+**Matrix Plot**
+- Visualize the **locations and patterns** of missingness, like whether the missing values are clustered or spred randomly across the dataset
+- **White lines indicate missing values**
 
-|**Visualization**|**Description**|
+**Heatmap**
+- Compute and visualize the **correlation of missingness (range between -1 and 1) between pairs of columns with missing values**
+- It **does not include columns without missing values**. Columns without missing values are typically not the focus of this visualization because their missingness is not relevant in this context
+- The primary purpose is to **understand whether the missingness in one column is related to the missingness in other columns**
+- This insight will be useful in providing guidance on the imputation strategies
+
+|**Correlation**|**Description**|
 |:--|:--|
-|**Bar Plot**|Displays the **percentage of missing values for each column** in the dataset. Helps **identify columns with high proportion** of missing values.|
-|**Matrix Plot**|Visualize the **locations and patterns** of missingness, like whether the missing values are clustered or spred randomly across the dataset. **White lines indicate missing values**.|
-|**Heatmap**|Visualize the **correlation between columns with missing values**. It **does not include columns without missing values**. The primary purpose is to **understand whether the missingness in one column is related to the missingness in other columns**. This insight will be useful in providing guidance on the imputation strategies. Columns without missing values are typically not the focus of this visualization because their missingness is not relevant in this context.|
-|**Dendrogram**|**Group columns with similar missing data patterns together**. It helps **identify clusters of related missing data**.|
+|**1**|Suggest that when one variable is missing, the other is likely to be missing as well|
+|**0**|Suggest that the missingness of one variable does not affect the likelihood of missingness in another|
+|**-1**|Suggest that when one variable is missing, the other is likely to be present|
 
+**Dendrogram**
+- Tree-like diagram that shows the clustering of variables. It uses hierarchical clustering algorithms to group variables based on the similarity of their missing value patterns
+- It is useful in identifying whether the pattern of missingness is random or systematic
 
 &nbsp;
 
