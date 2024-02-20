@@ -63,6 +63,36 @@ The missingno library is a useful tool for visualizing and understanding missing
 
 To illustrate, we will use the missingno library to explore and analyse the missingness of data in the [Titanic dataset](https://www.kaggle.com/competitions/titanic/data).
 
+```python
+# Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
+# Load the titanic dataset
+df=pd.read_csv("titanic_train.csv")
+print(f"The dataset has {df.shape[0]} rows and {df.shape[1]} columns.")
+```
+The dataset has 891 rows and 12 columns.
 
+```python
+# Check for missing values
+missing_values = df.isnull().sum()
+missing_values_df = pd.DataFrame(missing_values, columns=["Count"])
+missing_values_df["% Missing"] = ((missing_values_df["Count"]/len(df))*100).round(2)
+missing_values_df[missing_values_df["Count"]>0]
+```
+> |              | Count     |  % Missing    |
+> |:-------      |:----------| :------------ |
+> | **Age**	     | 177       | 19.87         |
+> | **Cabin**    | 687       | 77.10         |
+> | **Embarked** | 2         | 0.22          |
 
+```python
+# Install missingno
+pip install missingno
+```
+```python
+# Import missingno
+import missingno as msno
+```
