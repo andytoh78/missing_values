@@ -276,3 +276,5 @@ plt.show()
 - The **height of each branch corresponds to the number of missing values** in the respective columns i.e. **"Cabin" has the highest count of missing values, followed by "Age" and "Embarked"**.
 - **Columns that are connected by a branch are considered to be in a cluster** i.e. they have similar missingness patterns.
 - The **distance between branches represents the dissimilarity between columns in terms of missingness**. The shorter the distance, the more similar their missingness patterns are. **"Pclass", "Survived", "Sex", "SibSp", "Parch", "Ticket", "Fare", and "Embarked" are connected and they form a cluster, indicating they have similar patterns of missing data. "Age" and "Cabin" are isolated, meaning their missingness patterns are not particularly similar to any of the other columns**.
+
+Now that we have an understanding of the various types of missing data, the following section will elaborate on the strategies for managing missingness, encompassing a spectrum of imputation methods.
