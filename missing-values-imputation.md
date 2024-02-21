@@ -1,0 +1,25 @@
+<div style="text-align:center;">
+    <img src="https://github.com/andytoh78/missing_values/assets/139482827/69bfcb61-4001-4716-b3be-f7c35b4b4075" alt="Image">
+</div>
+
+---
+
+## **Missing Values Imputation**
+
+Dealing with missing data effectively is crucial for the integrity of your analysis and model performance. Here are various strategies, ranging from simple to more complex techniques.
+
+|**Method**|**Description**|**Categorical**|**Numerical**|**Pros**|**Cons**|**When to Use?**|
+|:-|:-------|:-:|:-:|:--------------------|:-----------------------|:---------------------|
+|**Listwise Deletion**|Remove records with missing values|Y|Y|Simple and quick|May result in significant data loss, especially if there's a lot of missingness|When missingness is completely at random and data loss is acceptable|
+|**MEAN Imputation**|Replace with the mean of the observed values in the column|N|Y|Simple and quick|Does not consider relationships between the features. Not suitable for variables with outliers as this imputation method can introduce bias into the imputed values|When data is missing completely at random (MCAR) and the variable follows a normal distribution|
+|**MEDIAN Imputation**|Replace with the median of the observed values in the column|Y<br>(Ordinal)|Y|Simple and quick|Does not consider relationships between the features. Though more robust than mean imputation, median imputation can still be influenced by extreme values in the variable, leading to biased imputed values|When data is missing completely at random (MCAR) and when the distribution of the variable with missing column is skewed or contains outliers|
+|**MODE Imputation**|Replace with the most frequent value in the column|Y|N|Simple and quick|Does not consider relationships between the features and may not always provide representative results|Suitable for categorical data with frequent mode values|
+|**Regression Imputation**|Predicts missing values using regression equations based on other available variables|Y|Y|Accounts for relationships between variables. Allows for detailed modeling of missing data|Requires the assumption that a linear relationship exists between variables. Does not account for uncertainty associated with imputed values. Can be sensitive to model specification|When data is NOT missing completely at random (MCAR) and can be explained by other variables.|
+|**MICE Imputation**|Multiple Imputation by Chained Equations (MICE) method|Y|Y|Accounts for relationships between features.<br>Provides multiple imputations for uncertainty estimation.<br>Versatile. Suitable for various types of missing data|Can be computationally intensive|When data relationships and when the missing data is missing at random (MAR) - otherwise it may introduce bias into the imputed values|
+|**MICE with LightGBM (miceforest)**|Multiple Imputation by Chained Equations using LightGBM as a model|Y|Y|Leverages power of gradient boosting, can handle mixed data types|Computationally intensive and requires careful tuning|When a robust imputation method is desired and computational resources are available|
+|**MissForest Imputation**|Utilizes Random Forests to estimate missing values|Y|Y|Efficient for large datasets and can handle complex data structures and variable types|May not provide detailed uncertainty estimates. Sensitivity to hyperparameters. Less interpretable than traditional methods|When dealing with large datasets, complex data structures, and when speed and efficiency are critical|
+|**KNN Imputation**|Use the k-nearest neighbors to impute missing values|Y|Y|Can capture complex patterns in the data|Computationally expensive, especially for large datasets|When other simpler methods don't perform well and enough computational power is available|
+|**Interpolation**| Fill missing values using various interpolation techniques such as LOCF (Last Observation Carried Forward) and NOCB (Next Observation Carried Backward)|N|Y|-| Effective for time series data with trends| Assumes a specific pattern or trend, may not be valid for all datasets. Can introduce bias, especially in trending or seasonal data|Time series data with consistent trends|
+|**Random Imputation**|Replace missing values with random values from the dataset|Y|Y|Simple and quick|May introduce randomness and not leverage patterns in the data|As a temporary solution or baseline|
+|**Constant Imputation**|Replace missing values with a constant|Y|Y|Can be effective for categorical variables to highlight missingness|Does not use any information from the data. Can distort distributions|To explicitly highlight missingness|
+|**End of Distribution Imputation**|Replace with values at the extreme end|N|Y|Can be effective if missingness is associated with 'extremeness'|May introduce outliers. Distorts the original distribution|When missingness might be related to extreme behavior|
