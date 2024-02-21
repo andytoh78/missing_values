@@ -247,7 +247,7 @@ ax[1].legend()
 plt.tight_layout()
 plt.show()
 ```
-![image](https://github.com/andytoh78/missing_values/assets/139482827/39eae3a5-e14c-4d21-9866-9d6b3b346454)
+![image](https://github.com/andytoh78/missing_values/assets/139482827/ea3f79dd-d2f1-460c-adf6-7812d083dbb4)
 
 - The boxplot clearly shows different means and medians for the two groups ("Fare_with_Cabin" and "Fare_without_Cabin")
 - The distribution of fares for passengers with cabin information is generally higher than that of passengers without cabin information. The presence of many outliers in the "Fare_without_Cabin" group suggests that while most passengers without cabin details paid lower fares, there were still a few who paid higher fares.
@@ -255,3 +255,24 @@ plt.show()
 - Overall, these plots have **demonstrated significant difference in the 'Fare' between passengers with and without cabin information**. We will further validate this using T-test.
 
 ### **${\color{black}\textsf{Heatmap}}$**
+
+```python
+msno.heatmap(df, figsize=(6, 5), cmap='magma', fontsize=10)
+plt.show()
+```
+<img src="https://github.com/andytoh78/missing_values/assets/139482827/445a803b-afc8-45c7-9200-e40b84504e96" width="500" height="400">
+
+The heatmap suggests that the **missingness for each of the columns with missing values ["Cabin", "Age", "Embarked"] is not strongly associated with the missingness of the other columns**.
+
+### **${\color{black}\textsf{Dendrogram}}$**
+
+```python
+msno.dendrogram(df, figsize=(8, 4), fontsize=10)
+plt.show()
+```
+
+![image](https://github.com/andytoh78/missing_values/assets/139482827/dad8e06f-16be-4afa-aaff-b8fe861c518d)
+
+- The **height of each branch corresponds to the number of missing values** in the respective columns i.e. **"Cabin" has the highest count of missing values, followed by "Age" and "Embarked"**.
+- **Columns that are connected by a branch are considered to be in a cluster** i.e. they have similar missingness patterns.
+- The **distance between branches represents the dissimilarity between columns in terms of missingness**. The shorter the distance, the more similar their missingness patterns are. **"Pclass", "Survived", "Sex", "SibSp", "Parch", "Ticket", "Fare", and "Embarked" are connected and they form a cluster, indicating they have similar patterns of missing data. "Age" and "Cabin" are isolated, meaning their missingness patterns are not particularly similar to any of the other columns**.
