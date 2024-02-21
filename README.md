@@ -71,8 +71,11 @@ import matplotlib.pyplot as plt
 
 # Load the titanic dataset
 df=pd.read_csv("titanic_train.csv")
+display(df.head())
 print(f"The dataset has {df.shape[0]} rows and {df.shape[1]} columns.")
 ```
+![image](https://github.com/andytoh78/missing_values/assets/139482827/8fe28508-836b-4adc-812d-d7a7be02aa1d)
+
 The dataset has 891 rows and 12 columns.
 
 ```python
@@ -147,6 +150,108 @@ From the matrix plots,
 - The **missing values for "Age" is also likely to be Missing Completely At Random (MCAR)**  as the missing values are randomly distributed in all the matrix plots.</p>
 - The **missingness for "Cabin" seems to have an association with the "Pclass" (passenger class) and "Fare"**. Passengers in higher classes, such as first class, who likely paid higher fares for their tickets, are more likely to have cabin information available. Therefore, the **missing values for "Cabin" are likely to be Missing at Random (MAR)** and the missingness can be predicted from the observed data in  "Pclass" and "Fare".
 
+Statistical methods can be used to test for association between the missingness in one variable and the values in another variable. 
+- Categorical vs. Categorical : Chi-squared test
+- Categorical vs. Numerical : T-test for two categories or ANOVA for more than two categories
+- Numerical vs. Numerical : Pearson correlation coefficient
 
+### **${\color{black}\textsf{Chi-Squared Test}}$**
 
+Let's delve deeper to see if there is indeed a significant association between Cabin and Pclass.
 
+```python
+from scipy.stats import chi2_contingency
+
+# Convert the missingness of 'Cabin' into a binary categorical variable (1 for missing, 0 for not missing)
+df['Cabin_Missing'] = df['Cabin'].isnull().astype(int)
+
+# Create a contingency table that cross-tabulates this binary variable with 'Pclass'
+contingency_table = pd.crosstab(df['Cabin_Missing'], df['Pclass'])
+print("Contingency Table")
+display(contingency_table)
+
+# Perform the chi-squared test
+chi2_stat, p_val, dof, ex = chi2_contingency(contingency_table)
+
+# Interpret the p-value
+significance_level = 0.05
+if p_val <= significance_level:
+    result = "The missingness of Cabin is associated with Pclass."
+else:
+    result = "No significant association found between the missingness of Cabin and Pclass."
+
+print(f"Chi-squared Statistic: {chi2_stat}, P-value: {p_val}\nResult: {result}")
+```
+Contingency Table
+| Pclass<br>Cabin_missing | 1 | 2 | 3 |
+|:-----|:---:|:---:|:---:|
+| 0 | 176 | 16 | 12 |
+| 1 | 40 | 168 | 479 |
+
+Chi-squared Statistic: 557.3102629401849, P-value: 9.585484042103076e-122<br>
+Result: **The missingness of Cabin is associated with Pclass**.
+
+### **${\color{black}\textsf{T-test}}$**
+
+We will now take a look at Cabin and Fare. 
+
+```python
+# Use T-test to test for association between the missingness of Cabin and Fare
+from scipy.stats import ttest_ind
+
+# Split the Fare data into two groups (with missing vs non-missing Cabin)
+group1 = df[df['Cabin_Missing'] == 0]['Fare']
+group2 = df[df['Cabin_Missing'] == 1]['Fare']
+
+# Perform the T-test
+t_stat, p = ttest_ind(group1, group2, equal_var=False)  # Assuming unequal variances with Welch's t-test
+
+print(f"T-statistic = {t_stat}")
+print(f"P-value = {p}")
+
+if p < 0.05:
+    print("\nThere is a significant difference in 'Fare' between passengers with and without cabin information.")
+else:
+    print("\nThere is no significant difference in 'Fare' between passengers with and without cabin information.")
+```
+T-statistic = -10.707225705301752
+P-value = 7.974017535465969e-22
+
+There is a significant difference in 'Fare' between passengers with and without cabin information.
+
+```python
+import seaborn as sns
+# Set up the figure and axes
+fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(10,7), gridspec_kw={'height_ratios': [1, 2]}, sharex=True)
+
+# Boxplot on top
+sns.boxplot(data=[group1, group2], orient='h', width=0.7, notch=True, showmeans=True, meanline=True,
+            boxprops={"linewidth": 1.5, "edgecolor": "black"},
+            meanprops={"linestyle": ':', "linewidth": 1.5, "color": "navy"},
+            flierprops={"marker": "o", "markerfacecolor": "darkblue", "markersize" : 6}, 
+            ax=ax[0], palette=["limegreen", "coral"])
+ax[0].set_yticklabels(['Fare_with_Cabin', 'Fare_without_Cabin'])
+ax[0].set_xlabel('') 
+ax[0].set_title("Distribution of Fares vs Cabin\n", fontsize=14, fontweight=600)
+
+# Histogram below
+sns.histplot(group1, ax=ax[1], color="limegreen", stat="density", linewidth=0.1, kde=True, label="Fare_with_Cabin")
+sns.histplot(group2, ax=ax[1], color="coral", stat="density", linewidth=0.1, kde=True, label="Fare_without_Cabin")
+sns.kdeplot(group1, ax=ax[1], color="forestgreen", linewidth=3)
+sns.kdeplot(group2, ax=ax[1], color="red", linewidth=3)
+ax[1].set_ylabel("Density\n", fontsize=12, fontweight=600)
+ax[1].set_ylim(0, 0.05)
+ax[1].legend()
+
+# Adjust layout
+plt.tight_layout()
+plt.show()
+```
+![image](https://github.com/andytoh78/missing_values/assets/139482827/39eae3a5-e14c-4d21-9866-9d6b3b346454)
+
+- The boxplot clearly shows different means and medians for the two groups ("Fare_with_Cabin" and "Fare_without_Cabin")
+- The distribution of fares for passengers with cabin information is generally higher than that of passengers without cabin information. The presence of many outliers in the "Fare_without_Cabin" group suggests that while most passengers without cabin details paid lower fares, there were still a few who paid higher fares.
+- The density plots below further confirm these observations, where the peak for "Fare_with_Cabin" is shifted to the right (indicating higher fares) compared to the peak for "Fare_without_Cabin".
+- Overall, these plots have **demonstrated significant difference in the 'Fare' between passengers with and without cabin information**. We will further validate this using T-test.
+
+### **${\color{black}\textsf{Heatmap}}$**
