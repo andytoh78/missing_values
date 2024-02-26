@@ -8,6 +8,55 @@
 
 Dealing with missing data effectively is crucial for the integrity of your analysis and model performance. Here are various strategies, ranging from simple to more complex techniques.
 
+### **Listwise Deletion**
+- Also known as complete case analysis, it involves removing any record with a missing value.
+- This method is simple but can lead to significant data loss, especially if the missing values are spread across different variables.
+- Should only be considered when the data is MCAR and the proportion of missing data is small.
+
+```python
+# Drop all rows with missing values
+df.dropna(inplace=True)
+
+# Drop rows where a specific column has missing values
+df.dropna(subset=["column"], inplace=True)
+``` 
+### **Column Deletion**
+- Also known as variable or feature deletion, it involves removing an entire column from the dataset if it contains missing values.
+- Simmilar to listwise deletion, this method is simple but can lead to the loss of potentially valuable information.
+- Should only be used for columns that exhibit significant missingness and/ or if the variable is deemed insignificant or not crucial for the analysis.
+  
+```python
+# Drop all columns with missing values
+df.dropna(axis=1, inplace=True)
+
+# Drop specific columns with missing values
+df.drop(["column1", "column2", ...], axis=1, inplace=True)
+```
+From the titanic dataset, we will use "Cabin", which has a high percentage of missing values (77%), as an example to demonstrate column deletion. In such cases, where a significant portion of the data is missing from a specific column, removing that column can be a practical decision in data preprocessing.
+
+```python
+# Import libraries
+import numpy as np
+import pandas as pd
+
+# Load the titantic dataset
+df=pd.read_csv("titanic_train.csv")
+
+# Drop Cabin (77% missing values)
+df2.drop(columns="Cabin", inplace=True)
+```
+
+### **Pairwise Deletion**
+- This is a more conservative method than listwise deletion as it keeps the data intact and selectively excludes missing data only during specific statisical analyses such as correlations or regressions.
+- Simmilar to listwise deletion, this method is simple but can lead to the loss of potentially valuable information.
+- Should only be used when the missingness pattern varies across variables and is either MCAR or MAR.
+  
+```python
+# Pairwise deletion in pandas for correlation
+pairwise_corr = df.corr()
+```
+
+
 |**Method**|**Description**|**Categorical**|**Numerical**|**Pros**|**Cons**|**When to Use?**|
 |:-|:-------|:-:|:-:|:--------------------|:-----------------------|:---------------------|
 |**Listwise Deletion**|Remove records with missing values|Y|Y|Simple and quick|May result in significant data loss, especially if there's a lot of missingness|When missingness is completely at random and data loss is acceptable|
