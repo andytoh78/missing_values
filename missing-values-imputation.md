@@ -55,7 +55,9 @@ df2.drop(columns="Cabin", inplace=True)
 # Pairwise deletion in pandas for correlation
 pairwise_corr = df.corr()
 ```
+![image](https://github.com/andytoh78/missing_values/assets/139482827/a54f0ac3-1080-4669-997b-208ce6a903e3)
 
+In this matrix, the correlation between "Age" and the rest of the numerical variables is calculated based on the rows where both "Age" and the respective variable have non-missing values. This method ensures that each correlation coefficient is derived from the maximum available data without introducing bias from rows with missing values in either of the two variables being compared. However, this can lead to biases if the pattern of missingness is not random (MCAR).
 
 |**Method**|**Description**|**Categorical**|**Numerical**|**Pros**|**Cons**|**When to Use?**|
 |:-|:-------|:-:|:-:|:--------------------|:-----------------------|:---------------------|
